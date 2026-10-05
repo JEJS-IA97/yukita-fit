@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { IngredientsService } from './ingredients.service';
 import { CreateIngredientDto } from './dto/create-ingredient.dto';
@@ -19,9 +19,9 @@ export class IngredientsController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'List all ingredients' })
-  async findAll() {
-    return this.ingredientsService.findAll();
+  @ApiOperation({ summary: 'List ingredients filtered by status' })
+  async findAll(@Query('status') status?: 'active' | 'inactive' | 'all') {
+    return this.ingredientsService.findAll(status);
   }
 
   @Get(':id')

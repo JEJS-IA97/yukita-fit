@@ -154,21 +154,21 @@ Cada tarea se implementa con pruebas primero, se ejecuta su suite aplicable y re
   - [x] Resumen de gastos del mes (manuales y compras) en VES y USD.
   - [x] Lista de ingredientes con existencia critica o agotada.
 
-- [ ] **T034 - Implementar pantalla de perfil y cierre de sesion**
+- [x] **T034 - Implementar pantalla de perfil y cierre de sesion**
   - RF: RF-021, RF-022.
   - Diseno: `docs/design/examples/user profile.jpg`.
   - Hecho cuando: el perfil muestra los datos de la cuenta activa (nombre, usuario y rol) y cierra la sesion limpiando los tokens locales.
-  - [ ] Vista de perfil con datos de `GET /auth/me`.
-  - [ ] Boton de cerrar sesion que limpia tokens y vuelve al login.
+  - [x] Vista de perfil con datos de `GET /auth/me`.
+  - [x] Boton de cerrar sesion que limpia tokens y vuelve al login.
   - Nota: editar nombre o contrasena queda fuera de alcance hasta definir un endpoint nuevo.
 
-- [ ] **T035 - Implementar pantalla de ingredientes y formulario CRUD**
+- [x] **T035 - Implementar pantalla de ingredientes y formulario CRUD**
   - RF: RF-001 a RF-004.
   - Diseno: `docs/design/examples/ingredientes.png`, `inventory manager.jpg`, `invetory.png` y `Search.png`.
   - Hecho cuando: se pueden buscar, crear, editar, desactivar o eliminar ingredientes desde el movil con validaciones visibles.
-  - [ ] Lista de ingredientes con buscador y filtro activo/inactivo.
-  - [ ] Formulario crear/editar con nombre unico normalizado y unidad (RF-001, RF-001a, RF-002).
-  - [ ] Acciones desactivar/eliminar con bloqueos del backend visibles (RF-003, RF-003a, RF-004).
+  - [x] Lista de ingredientes con buscador y filtro activo/inactivo.
+  - [x] Formulario crear/editar con nombre unico normalizado y unidad (RF-001, RF-001a, RF-002).
+  - [x] Acciones desactivar/eliminar con bloqueos del backend visibles (RF-003, RF-003a, RF-004).
 
 - [ ] **T036 - Implementar gestion movil de categorias de gastos**
   - RF: RF-009a.

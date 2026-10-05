@@ -36,9 +36,16 @@ export class IngredientsService {
     });
   }
 
-  async findAll() {
+  async findAll(status?: 'active' | 'inactive' | 'all') {
+    const normalized =
+      status === 'inactive' || status === 'all' ? status : 'active';
+    const where =
+      normalized === 'all'
+        ? {}
+        : { isActive: normalized === 'active' };
+
     return this.prisma.ingredient.findMany({
-      where: { isActive: true },
+      where,
       orderBy: { name: 'asc' },
     });
   }

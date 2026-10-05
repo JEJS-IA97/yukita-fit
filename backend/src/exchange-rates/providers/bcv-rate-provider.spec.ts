@@ -1,5 +1,6 @@
 import { fetchValidatedRate } from './rate-provider';
 import {
+  BCV_DEFAULTS,
   BcvRateProvider,
   RateProviderError,
   createBcvProviderFromEnv,
@@ -157,7 +158,31 @@ describe('BcvRateProvider (RF-016, RF-017)', () => {
     });
     const snapshot = await fetchValidatedRate(withFetch);
     expect(snapshot.valueVesPerUsd).toBe(36.5);
+  });
 
-    expect(() => createBcvProviderFromEnv({} as NodeJS.ProcessEnv)).toThrow();
+  it('falls back to the public DolarAPI source when no env is set', async () => {
+    const provider = createBcvProviderFromEnv({} as NodeJS.ProcessEnv);
+
+    expect(provider.rateType).toBe('BCV');
+    expect(provider.source).toBe('DolarAPI (BCV)');
+
+    const fetchImpl = makeFetch({
+      moneda: 'USD',
+      fuente: 'oficial',
+      nombre: 'DA3lar',
+      compra: null,
+      venta: null,
+      promedio: 866.5612,
+      fechaActualizacion: '2026-10-02T00:00:00-04:00',
+    });
+    const snapshot = await fetchValidatedRate(
+      new BcvRateProvider({ ...BCV_DEFAULTS, fetchImpl }),
+    );
+
+    expect(snapshot.rateType).toBe('BCV');
+    expect(snapshot.valueVesPerUsd).toBe(866.5612);
+    expect(snapshot.effectiveDate).toEqual(
+      new Date('2026-10-02T00:00:00-04:00'),
+    );
   });
 });
