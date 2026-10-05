@@ -5,6 +5,7 @@ export type AuthUser = {
   name: string;
   username: string;
   role: Role;
+  email?: string;
 };
 
 export type Tokens = {

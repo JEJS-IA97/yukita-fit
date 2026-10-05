@@ -63,6 +63,41 @@ describe('IngredientsService (Prisma simulated)', () => {
         orderBy: { name: 'asc' },
       });
     });
+
+    it('lists inactive ingredients when status is inactive', async () => {
+      const rows = [{ id: '2', name: 'Queso', isActive: false }];
+      prismaMock.ingredient.findMany.mockResolvedValue(rows);
+
+      const result = await service.findAll('inactive');
+
+      expect(result).toEqual(rows);
+      expect(prismaMock.ingredient.findMany).toHaveBeenCalledWith({
+        where: { isActive: false },
+        orderBy: { name: 'asc' },
+      });
+    });
+
+    it('lists every ingredient when status is all', async () => {
+      prismaMock.ingredient.findMany.mockResolvedValue([]);
+
+      await service.findAll('all');
+
+      expect(prismaMock.ingredient.findMany).toHaveBeenCalledWith({
+        where: {},
+        orderBy: { name: 'asc' },
+      });
+    });
+
+    it('falls back to active for unknown status values', async () => {
+      prismaMock.ingredient.findMany.mockResolvedValue([]);
+
+      await service.findAll('weird' as 'active');
+
+      expect(prismaMock.ingredient.findMany).toHaveBeenCalledWith({
+        where: { isActive: true },
+        orderBy: { name: 'asc' },
+      });
+    });
   });
 
   describe('create', () => {

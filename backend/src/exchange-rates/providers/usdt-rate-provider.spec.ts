@@ -1,5 +1,6 @@
 import { fetchValidatedRate } from './rate-provider';
 import {
+  USDT_DEFAULTS,
   UsdtRateProvider,
   RateProviderError,
   createUsdtProviderFromEnv,
@@ -102,7 +103,29 @@ describe('UsdtRateProvider (RF-016, RF-017)', () => {
 
     expect(provider.rateType).toBe('USDT');
     expect(provider.source).toBe('mercado-referencia');
+  });
 
-    expect(() => createUsdtProviderFromEnv({} as NodeJS.ProcessEnv)).toThrow();
+  it('falls back to the public Brecha-Cambiaria source when no env is set', async () => {
+    const provider = createUsdtProviderFromEnv({} as NodeJS.ProcessEnv);
+
+    expect(provider.rateType).toBe('USDT');
+    expect(provider.source).toBe('Brecha-Cambiaria');
+
+    const fetchImpl = makeFetch({
+      bcv_usd: 871.37,
+      usdt_avg: 974.76,
+      usdt_buy: 974.79,
+      usdt_sell: 974.72,
+      timestamp: '2026-10-05T00:14:31.338679Z',
+    });
+    const snapshot = await fetchValidatedRate(
+      new UsdtRateProvider({ ...USDT_DEFAULTS, fetchImpl }),
+    );
+
+    expect(snapshot.rateType).toBe('USDT');
+    expect(snapshot.valueVesPerUsd).toBe(974.76);
+    expect(snapshot.effectiveDate).toEqual(
+      new Date('2026-10-05T00:14:31.338679Z'),
+    );
   });
 });

@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { router } from 'expo-router';
+import { Pressable, StyleSheet, Text } from 'react-native';
 
 import { useAuth } from '@/auth/auth-context';
 import { colors } from '@/theme';
@@ -9,9 +10,14 @@ export function HeaderAvatar() {
   const initial = source.trim().charAt(0).toUpperCase();
 
   return (
-    <View style={styles.avatar}>
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel="Abrir perfil"
+      style={styles.avatar}
+      onPress={() => router.push('/profile')}
+    >
       <Text style={styles.letter}>{initial}</Text>
-    </View>
+    </Pressable>
   );
 }
 

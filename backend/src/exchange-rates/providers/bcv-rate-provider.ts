@@ -14,6 +14,13 @@ export type BcvRateProviderOptions = Omit<
   'rateType'
 >;
 
+export const BCV_DEFAULTS = {
+  endpointUrl: 'https://ve.dolarapi.com/v1/dolares/oficial',
+  source: 'DolarAPI (BCV)',
+  valueField: 'promedio',
+  dateField: 'fechaActualizacion',
+} as const;
+
 export class BcvRateProvider extends HttpJsonRateProvider {
   constructor(options: BcvRateProviderOptions) {
     super({ ...options, rateType: 'BCV' });
@@ -23,14 +30,10 @@ export class BcvRateProvider extends HttpJsonRateProvider {
 export function createBcvProviderFromEnv(
   env: NodeJS.ProcessEnv,
 ): BcvRateProvider {
-  const endpointUrl = env.BCV_RATE_URL;
-  if (!endpointUrl) {
-    throw new Error('BCV_RATE_URL is not configured');
-  }
   return new BcvRateProvider({
-    endpointUrl,
-    source: env.BCV_RATE_SOURCE || 'BCV',
-    valueField: env.BCV_RATE_FIELD || 'rate',
-    dateField: env.BCV_RATE_DATE_FIELD || undefined,
+    endpointUrl: env.BCV_RATE_URL || BCV_DEFAULTS.endpointUrl,
+    source: env.BCV_RATE_SOURCE || BCV_DEFAULTS.source,
+    valueField: env.BCV_RATE_FIELD || BCV_DEFAULTS.valueField,
+    dateField: env.BCV_RATE_DATE_FIELD || BCV_DEFAULTS.dateField,
   });
 }

@@ -103,6 +103,22 @@ describe('IngredientsController (HTTP)', () => {
     expect(response.body).toEqual([]);
   });
 
+  it('filters the list by status query', async () => {
+    const inactive = [{ id: 'ing-2', name: 'Queso', isActive: false }];
+    prismaMock.ingredient.findMany.mockResolvedValue(inactive);
+
+    const response = await request(http())
+      .get('/ingredients?status=inactive')
+      .set('Authorization', `Bearer ${tokenFor('jose')}`)
+      .expect(200);
+
+    expect(response.body).toEqual(inactive);
+    expect(prismaMock.ingredient.findMany).toHaveBeenCalledWith({
+      where: { isActive: false },
+      orderBy: { name: 'asc' },
+    });
+  });
+
   it('lets each initial account create ingredients (RF-021)', async () => {
     for (const username of ['jose', 'jay', 'vivi']) {
       prismaMock.ingredient.findUnique.mockResolvedValue(null);
